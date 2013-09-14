@@ -1,0 +1,10 @@
+{
+    "name": "ScoreCard",
+    "version": "0.0.1",
+    "description": "ScoreCard app by Pieter",
+    "dependencies": {
+        "express": "latest",
+        "jade": "latest"
+    },
+    "author": "Pieter Baecke (@pieterbaecke)"
+}

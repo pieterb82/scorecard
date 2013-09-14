@@ -1,0 +1,23 @@
+!!!
+html
+	head
+		title="ScoreCard app"
+		script(src='//code.jquery.com/jquery-latest.min.js')
+		script(src='/scorecard.js')
+		script(src='/socket.io/socket.io.js')
+		link(rel='stylesheet', href='my.css', type='text/css')
+	body
+		.container(style='width:900px;height:350px;background:#eee;border:1px solid #ccc;margin:0 auto;')
+			section#courseselect
+				p Selecteer een baan
+				select#course(name="courses", onchange="courseSelected()")
+					option Choose a coures...
+					for course in banen
+						option(value=" #{course.id}") #{course.name}
+			section#handicap
+				p Strokes received
+					input#strokes(style="width:100px;")
+					button(onclick="strokes()") Set
+			section#holes
+				p holes
+			input#score_id(type="hidden", value="#{scorecard}") 
