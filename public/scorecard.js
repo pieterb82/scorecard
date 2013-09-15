@@ -1,47 +1,76 @@
 var socket;
-var courses = document.getElementById("courseselect");
 var handicap = document.getElementById("handicap");
 var holes = document.getElementById("holes");
 var selectedHole;
+var stablefordCount = 0;
+var stablefordTotal;
 
 $(document).ready(function(){
-		$('#handicap').hide();
 		$('#holes').hide();
+		$('#prev').hide();
+		$('#next').hide();
+
 		console.log('Scorecard started!');
-		socket = io.connect('htp://localhost:8000');
+		socket = io.connect('htp://192.168.2.3:8000');
 		socket.on('status', function (data){
-			console.log(data);
+			$('#hole'+data.id).children('.stableford').html("Stablefordpunten: "+data.stablefordpunten);
+		 	$("points").html("Stablefordpunten: "+stablefordCount);
 		});
 		socket.on('hole', function (data){
 			showHoles(data);
+
 			console.log(data);
 		});
+
+
 });
 
-function courseSelected(hole){
-	$("#handicap").show('slow', function(){
-		$("#courseselect").slideUp();
+
+function setName(){
+	var naam = document.getElementById("naam");
+	socket.emit('setname', {name : naam.value});
+	$("#holes").show('slow', function(){
+			$('#name').slideUp();
+			$('#next').show();
+			$('#prev').show();
 	});
-	selectedHole = document.getElementById("course").value;
 }
 
-function strokes(){
-	var stroke = document.getElementById("strokes");
-	socket.emit('strokes', {strokes : stroke.value});
-	$("#holes").show('slow', function(){
-			$('#handicap').slideUp();
-	});
-	socket.emit('gethole', {id : selectedHole}, function (err, data){
-		console.log(data);
-	});
+function getStablefordTotal(){
+ 	var val = 0;
+	for(i = 0; i < stablefordTotal.length; i++){
+		if(stablefordTotal[i]=="undefined"){
+			alert(stablefordTotal[i]);
+			val += stablefordTotal[i];
+		}
+	}
+	return val;
 }
+
+function next(){
+	var $active = $('div.active');
+	if($active.next().length>0){
+		$active.next().addClass('active');
+		$active.removeClass('active');
+	}
+}
+
+function prev(){
+	var $active = $('div.active');
+	if($active.prev().length>0){
+		$active.prev().addClass('active');
+		$active.removeClass('active');
+	}
+}
+
 
 function increase(id){
 	var scoreid = document.getElementById(id);
 	var scorecard_id = document.getElementById("score_id");
 	scoreid.value++;
-	socket.emit('score', {hole: id, score : scoreid.value, card_id: scorecard_id.value});
-	console.log("Hole " + id + " score : "+ scoreid.value);
+	var si =  $("#strokeindex"+id).val();
+	var parin =  $("#par"+id).val()
+	socket.emit('score', {hole: id, score : scoreid.value, name: document.getElementById("naam").value, strokeindex: si, par : parin});
 }
 
 function decrease(id){
@@ -49,27 +78,8 @@ function decrease(id){
 	var scorecard_id = document.getElementById("score_id");
 	if(scoreid.value!=0){
 		scoreid.value--;
-		socket.emit('score', {hole: id, score : scoreid.value, card_id: scorecard_id.value});
-		console.log("Hole " + id + " score : "+ scoreid.value);
+		var si =  $("#strokeindex"+id).val();
+		var parin =  $("#par"+id).val()
+		socket.emit('score', {hole: id, score : scoreid.value, name: document.getElementById("naam").value, strokeindex : si, par : parin});
 	}
-}
-
-function showHoles(data){
-	console.log(JSON.stringify(data));
-	var html = "";
-	
-	for(i=0; i<data.holes.length; i++){
-		if(i==9){
-			html += '<div style="clear:both;"></div>';
-		}
-		//console.log(temp);
-		html += '<div id="hole'+(i+1)+'" style="float:left;margin-right:10px;width:50px;">';
-		html += '<h3>Hole '+(i+1)+'</h3>';
-		html += '<p>Par '+data.holes[i].par+'</p>'
-		html += '<button onclick="increase('+(i+1)+')">+</button>';
-		html += '<input type="text" value="0" id="'+(i+1)+'" style="width:25px;">';
-		html += '<button onclick="decrease('+(i+1)+')">-</button>';
-		html += '</div>';	
-	}
-	$('#holes').html(html);
 }

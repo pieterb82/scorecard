@@ -2,11 +2,121 @@
 html
 	head
 		title="ScoreCard app"
+		meta(name='viewport',content='width=device-width, initial-scale=1')
 		script(src='//code.jquery.com/jquery-latest.min.js')
 		script(src='/scorecard.js')
 		script(src='/socket.io/socket.io.js')
 		link(rel='stylesheet', href='my.css', type='text/css')
 	body
-		.container(style='width:900px;height:350px;background:#eee;border:1px solid #ccc;margin:0 auto;')
-			a(href="http://localhost:8000/scorecard") Nieuwe scorecard lopen
-			
+		header
+			img#logo(src="/images/holeciety.png")
+		.container
+			section#name
+				p Naam:
+				input#naam
+				button(onclick="setName()") Set naam
+			a#prev(onclick="prev();") <
+			section#holes
+				#hole10.active
+					h3 Hole 10
+					p.par Par 4
+					p.yellow 369
+					p.red 303
+					button.plus(onclick="increase(10)") +
+					input#10(value="0")
+					button.min(onclick="decrease(10)") -
+					input#strokeindex10(type="hidden" value="7")
+					input#par10(type="hidden" value="4")
+					p.stableford
+				#hole11
+					h3 Hole 11
+					p.par Par 4
+					p.yellow 328
+					p.red 267
+					button.plus(onclick="increase(11)") +
+					input#11(value="0")
+					button.min(onclick="decrease(11)") -
+					p.stableford
+					input#strokeindex11(type="hidden" value="17")
+					input#par11(type="hidden" value=4)
+				#hole12
+					h3 Hole 12
+					p.par Par 3
+					p.yellow 164
+					p.red 141
+					button.plus(onclick="increase(12)") +
+					input#12(value="0")
+					button.min(onclick="decrease(12)") -
+					p.stableford
+					input#strokeindex12(type="hidden" value="15")
+					input#par12(type="hidden" value="3")
+				#hole13
+					h3 Hole 13
+					p.par Par 5
+					p.yellow 474
+					p.red 402
+					button.plus(onclick="increase(13)") +
+					input#13(value="0")
+					button.min(onclick="decrease(13)") -
+					p.stableford
+					input#strokeindex13(type="hidden" value="9")
+					input#par13(type="hidden" value="5")
+				#hole14
+					h3 Hole 14
+					p.par Par 4
+					p.yellow 334
+					p.red 293
+					button.plus(onclick="increase(14)") +
+					input#14(value="0")
+					button.min(onclick="decrease(14)") -
+					p.stableford
+					input#strokeindex14(type="hidden" value="11")
+					input#par14(type="hidden" value="4")
+				#hole15
+					h3 Hole 15
+					p.par Par 4
+					p.yellow 384
+					p.red 325
+					button.plus(onclick="increase(15)") +
+					input#15(value="0")
+					button.min(onclick="decrease(15)") -
+					p.stableford
+					input#strokeindex15(type="hidden" value="1")
+					input#par15(type="hidden" value="4")
+				#hole16
+					h3 Hole 16
+					p.par Par 4
+					p.yellow 374
+					p.red 312
+					button.plus(onclick="increase(16)") +
+					input#16(value="0")
+					button.min(onclick="decrease(16)") -
+					p.stableford
+					input#strokeindex16(type="hidden" value="5")
+					input#par16(type="hidden" value="4")
+				#hole17
+					h3 Hole 17
+					p.par Par 3
+					p.yellow 170
+					p.red 148
+					button.plus(onclick="increase(17)") +
+					input#17(value="0")
+					button.min(onclick="decrease(17)") -
+					p.stableford
+					input#strokeindex17(type="hidden" value="13")
+					input#par17(type="hidden" value="3")
+				#hole18
+					h3 Hole 18
+					p.par Par 5
+					p.yellow 481
+					p.red 401
+					button.plus(onclick="increase(18)") +
+					input#18(value="0")
+					button.min(onclick="decrease(18)") -
+					p.stableford
+					input#strokeindex18(type="hidden" value="3")
+					input#par18(type="hidden" value="5")
+				#total
+					#strokes Slagen: 0
+					#points	Stablefordpunten: 0
+			a#next(onclick="next();") >

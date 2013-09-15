@@ -4,8 +4,11 @@ var stroke_index_dependend = 0;
 
 exports.setStrokes = function (strokes){
 	extra_strokes = strokes;
-	min_extra_per_hole = Math.floor(extra_strokes/18);
-	stroke_index_dependend = extra_strokes - (min_extra_per_hole*18);
+	//console.log('Extra strokes '+strokes);
+	min_extra_per_hole = Math.floor(extra_strokes/9);
+	//console.log('Minimal extra per hole ' +min_extra_per_hole+' strokes');
+	stroke_index_dependend = extra_strokes - (min_extra_per_hole*9);
+	//console.log('Hole dependend extra '+stroke_index_dependend+' strokes');
 }
 
 exports.showStrokes = function(){
@@ -13,6 +16,7 @@ exports.showStrokes = function(){
 }
 
 exports.calculateStableford = function(strokes, par,strokeindex){
+	console.log("Calculating stableford - Stokes "+ strokes + " - par " + par +" - strokeindex: "+strokeindex);
 	var hole_extra_strokes = min_extra_per_hole;
 	if(stroke_index_dependend != 0)
 	{
@@ -20,7 +24,10 @@ exports.calculateStableford = function(strokes, par,strokeindex){
 			hole_extra_strokes++;
 		}
 	}
-	var result = (par + hole_extra_strokes) - strokes;
+
+	console.log("resultaat = ( par " + par +" + "+ hole_extra_strokes+ " ) - "+strokes );
+	var result = (parseInt(par) + parseInt(hole_extra_strokes)) - parseInt(strokes);
+	console.log(result);
 	switch(result){
 		case -2 : return 0;break;
 		case -1 : return 1;break;

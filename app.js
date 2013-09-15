@@ -1,8 +1,7 @@
 //required libraries
 var express = require('express'),
 	routes = require('./routes/score'),
-	stableford = require('./class/stableford')
-	courses = require('./routes/courses');
+	stableford = require('./class/stableford');
 
 //setting express app configuration
 var app = express();
@@ -17,21 +16,22 @@ app.engine('jade', require('jade').__express);
 app.get("/", function (req, res){
 	res.render("index");
 });
-app.get("/scorecard", courses.findAll);
 app.use(express.static(__dirname + '/public'));
 
-stableford.setStrokes(13);
+stableford.setStrokes(31);
 
 var io = require('socket.io').listen(app.listen(8000));
 
+var sockets = [];
 io.sockets.on('connection',function (socket){
+	sockets.push(socket);
 	socket.on('score', function (data){
 		routes.score(data);
-		socket.emit('status' , 'Hole' + data.hole + " is updated to " + data.score + ' stroke(s). Stableford is: '+ stableford.calculateStableford(data.score, 5, 5));
+		console.log(data);
+		socket.emit('status' , {stablefordpunten : stableford.calculateStableford(data.score, data.par, data.strokeindex), id : data.hole});
 	});
-	socket.on('strokes', function (data){
-		stableford.setStrokes(data.strokes);
-		console.log('Strokes set: '+ data.strokes);
+	socket.on('setname', function (data){
+		routes.createScorecard(data.name);
 	});
 	socket.on('gethole', function (data){
 		courses.getHole(data.id, socket);
