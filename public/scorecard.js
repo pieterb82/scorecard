@@ -3,7 +3,7 @@ var handicap = document.getElementById("handicap");
 var holes = document.getElementById("holes");
 var selectedHole;
 var stablefordCount = 0;
-var stablefordTotal;
+var holes = [];
 
 $(document).ready(function(){
 		$('#holes').hide();
@@ -11,10 +11,13 @@ $(document).ready(function(){
 		$('#next').hide();
 
 		console.log('Scorecard started!');
-		socket = io.connect('htp://192.168.2.3:8000');
+		socket = io.connect('htp://localhost:8000');
 		socket.on('status', function (data){
 			$('#hole'+data.id).children('.stableford').html("Stablefordpunten: "+data.stablefordpunten);
-		 	$("points").html("Stablefordpunten: "+stablefordCount);
+			holes[data.id] = data.stablefordpunten;
+			console.log(holes);
+			$("#strokes").html("Slagen: "+getStrokes());
+			$("#points").html("Stablefordpunten: "+getStablefordTotal());
 		});
 		socket.on('hole', function (data){
 			showHoles(data);
@@ -38,12 +41,15 @@ function setName(){
 
 function getStablefordTotal(){
  	var val = 0;
-	for(i = 0; i < stablefordTotal.length; i++){
-		if(stablefordTotal[i]=="undefined"){
-			alert(stablefordTotal[i]);
-			val += stablefordTotal[i];
-		}
+	for(key in holes){
+		val += holes[key];
 	}
+	return val;
+}
+
+function getStrokes(){
+	var val = 0;
+	$('.holestroke').each(function(index){val += parseInt($(this).val());});
 	return val;
 }
 

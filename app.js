@@ -18,7 +18,7 @@ app.get("/", function (req, res){
 });
 app.use(express.static(__dirname + '/public'));
 
-stableford.setStrokes(31);
+stableford.setStrokes(26);
 
 var io = require('socket.io').listen(app.listen(8000));
 
